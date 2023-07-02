@@ -8,11 +8,18 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class PersonTest {
     ObjectMapper mapper = new ObjectMapper();
+
+    @Test
+    void shouldInitialiseWithEmptyStarshipsList() {
+        Person p = new Person();
+
+        assertNotNull(p.getStarships());
+        assertTrue(p.getStarships().isEmpty());
+    }
 
     @Test
     void shouldDeserializeAllFields() throws IOException {
