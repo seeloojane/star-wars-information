@@ -6,22 +6,25 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class PersonTest {
     ObjectMapper mapper = new ObjectMapper();
+
     @Test
-    public void shouldDeserializeAllFields() throws IOException {
+    void shouldDeserializeAllFields() throws IOException {
         String json = """
-        {
-            "name": "someName",
-            "starships": [
-                "ship1",
-                "ship2"
-            ]
-        }
-     """;
+                   {
+                       "name": "someName",
+                       "starships": [
+                           "ship1",
+                           "ship2"
+                       ]
+                   }
+                """;
 
         Person person = mapper.readValue(json, Person.class);
 
@@ -30,17 +33,39 @@ class PersonTest {
     }
 
     @Test
-    public void shouldDeserializeStarshipsAsEmptyListIfNone() throws IOException {
+    void shouldDeserializeStarshipsAsEmptyListIfNone() throws IOException {
         String json = """
-        {
-            "name": "someName",
-            "starships": []
-        }
-     """;
+                   {
+                       "name": "someName",
+                       "starships": []
+                   }
+                """;
 
         Person person = mapper.readValue(json, Person.class);
 
         assertEquals("someName", person.getName());
         assertEquals(Collections.emptyList(), person.getStarships());
+    }
+
+    @Test
+    void shouldReturnFirstStarshipIdIfPresent() {
+        Person person = new Person("someName", List.of(
+                "https://swapi.dev/api/starships/10/",
+                "https://swapi.dev/api/starships/22/"
+        ));
+
+        Optional<Integer> result = person.getFirstStarshipId();
+
+        assertTrue(result.isPresent());
+        assertEquals(10, result.get());
+    }
+
+    @Test
+    void shouldReturnEmptyOptionalIfNoStarships() {
+        Person person = new Person("someName", Collections.emptyList());
+
+        Optional<Integer> result = person.getFirstStarshipId();
+
+        assertTrue(result.isEmpty());
     }
 }
