@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -14,7 +15,7 @@ import java.util.regex.Pattern;
 @AllArgsConstructor
 public class Person {
     private String name;
-    private List<String> starships;
+    private List<String> starships = Collections.emptyList();
 
     public Optional<Integer> getFirstStarshipId() {
         String regex = "(.*)/starships/(\\d+)/";
