@@ -5,8 +5,8 @@ import lombok.Getter;
 
 @Builder
 @Getter
-public class InformationResponse {
-    private Starship starship;
-    private int crew;
+public class Information {
+    private Starship darthVaderStarship;
+    private int deathStarCrew;
     private boolean isLeiaOnPlanet;
 }
