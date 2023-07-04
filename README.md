@@ -1,7 +1,9 @@
 # Partior Assignment - Star Wars Information
 
-This is a SpringBoot 3 application which exposes a single endpoint, `GET /information` that returns the information
-of relevant **swapi** resources as per the requirements.
+This is a SpringBoot 3 application.
+
+This which exposes a single endpoint, `GET /information`, which fetches information of several resources from
+[swapi](https://swapi.dev) servers and aggregates them to a response as per the requirements.
 
 ## Runtime Requirements
 
