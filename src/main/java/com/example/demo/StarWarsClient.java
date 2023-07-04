@@ -66,5 +66,4 @@ public class StarWarsClient {
             return null;
         }
     }
-
 }
