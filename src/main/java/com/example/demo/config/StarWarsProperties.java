@@ -13,8 +13,9 @@ import org.springframework.stereotype.Component;
 @Setter
 public class StarWarsProperties {
     private String baseUrl;
-    private String darthVaderId;
-    private String leiaId;
-    private String deathStarId;
-    private String alderaanId;
+
+    private int darthVaderId;
+    private int leiaId;
+    private int deathStarId;
+    private int alderaanId;
 }
