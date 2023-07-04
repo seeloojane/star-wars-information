@@ -1,20 +1,22 @@
 package com.example.demo;
 
+import com.example.demo.config.StarWarsProperties;
 import com.example.demo.data.Person;
 import com.example.demo.data.Planet;
 import com.example.demo.data.Starship;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.client.AutoConfigureWebClient;
 import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.client.MockRestServiceServer;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withResourceNotFound;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
@@ -22,7 +24,10 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 @RestClientTest(StarWarsClient.class)
 @AutoConfigureWebClient()
 class StarWarsClientTest {
+    private static final String BASE_URL = "https://example.com";
 
+    @MockBean
+    StarWarsProperties properties;
     @Autowired
     private StarWarsClient starWarsClient;
     @Autowired
@@ -30,12 +35,8 @@ class StarWarsClientTest {
 
     @BeforeEach
     void setUp() {
-        this.mockRestServiceServer.reset();
-    }
-
-    @AfterEach
-    void tearDown() {
-        this.mockRestServiceServer.verify();
+        when(properties.getBaseUrl()).thenReturn(BASE_URL);
+        mockRestServiceServer.reset();
     }
 
     @Test
@@ -56,6 +57,7 @@ class StarWarsClientTest {
 
         Starship result = starWarsClient.getSingleStarship(mockId);
 
+        mockRestServiceServer.verify();
         assertNotNull(result);
         assertEquals("Death Star", result.getName());
         assertEquals("DS-1 Orbital Battle Station", result.getModel());
@@ -73,6 +75,7 @@ class StarWarsClientTest {
 
         Starship result = starWarsClient.getSingleStarship(notFoundId);
 
+        mockRestServiceServer.verify();
         assertNull(result);
     }
 
@@ -83,7 +86,7 @@ class StarWarsClientTest {
                    {
                        "name": "Leia",
                         "starships": [
-                            "https://swapi.dev/api/starships/5/"
+                            "https://example/starships/5/"
                         ]
                    }
                 """;
@@ -94,9 +97,10 @@ class StarWarsClientTest {
 
         Person result = starWarsClient.getPerson(mockId);
 
+        mockRestServiceServer.verify();
         assertNotNull(result);
         assertEquals("Leia", result.getName());
-        assertEquals(List.of("https://swapi.dev/api/starships/5/"), result.getStarships());
+        assertEquals(List.of("https://example/starships/5/"), result.getStarships());
     }
 
     @Test
@@ -109,6 +113,7 @@ class StarWarsClientTest {
 
         Person result = starWarsClient.getPerson(notFoundId);
 
+        mockRestServiceServer.verify();
         assertNull(result);
     }
 
@@ -119,7 +124,7 @@ class StarWarsClientTest {
                    {
                        "name": "Alderaan",
                         "residents": [
-                            "https://swapi.dev/api/people/5/"
+                            "https://example/people/5/"
                         ]
                    }
                 """;
@@ -130,9 +135,10 @@ class StarWarsClientTest {
 
         Planet result = starWarsClient.getSinglePlanet(mockId);
 
+        mockRestServiceServer.verify();
         assertNotNull(result);
         assertEquals("Alderaan", result.getName());
-        assertEquals(List.of("https://swapi.dev/api/people/5/"), result.getResidents());
+        assertEquals(List.of("https://example/people/5/"), result.getResidents());
     }
 
     @Test
@@ -145,7 +151,7 @@ class StarWarsClientTest {
 
         Planet result = starWarsClient.getSinglePlanet(notFoundId);
 
+        mockRestServiceServer.verify();
         assertNull(result);
     }
-
 }

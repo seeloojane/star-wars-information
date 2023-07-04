@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import com.example.demo.config.StarWarsProperties;
 import com.example.demo.data.Person;
 import com.example.demo.data.Planet;
 import com.example.demo.data.Starship;
@@ -15,11 +16,10 @@ import org.springframework.web.client.RestTemplate;
 @Component
 @Slf4j
 public class StarWarsClient {
-
     private final RestTemplate restTemplate;
 
-    public StarWarsClient(RestTemplateBuilder restTemplateBuilder) {
-        this.restTemplate = restTemplateBuilder.rootUri("https://swapi.dev/api").build();
+    public StarWarsClient(RestTemplateBuilder restTemplateBuilder, StarWarsProperties properties) {
+        this.restTemplate = restTemplateBuilder.rootUri(properties.getBaseUrl()).build();
     }
 
     public Starship getSingleStarship(int id) {
